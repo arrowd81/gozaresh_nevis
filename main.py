@@ -3,11 +3,17 @@ import datetime
 
 
 class project:
-    def __init__(self, name:str) -> None:
+    def __init__(self, id:int, name:str) -> None:
+        self.id = id
         self.name = name
 
+    @classmethod
+    def from_dict(cls, dict_project):
+        return cls(dict_project['name'])
+
     def to_dict(self) -> dict:
-        return {'name': self.name}
+        return {'id': self.id,
+                'name': self.name}
 
 class entry:
     def __init__(self, project:project, description:str) -> None:
@@ -20,28 +26,30 @@ class entry:
                    dict_entry['description'])
     
     def to_dict(self) -> dict:
-        return {'project': self.project,
+        return {'project_id': self.project.id,
                 'description': self.description}
 
 
 class work_date:
-    def __init__(self, date:datetime.date = datetime.datetime.date(datetime.datetime.today())) -> None:
+    def __init__(self, date:datetime.date = datetime.datetime.today().date()) -> None:
         self.date = date
-        self.data = []
+        self.entrys = []
 
     @classmethod
     def from_dict(cls, raw_data:dict):
-        new_work_date = cls(raw_data['date'])
+        new_work_date = cls(datetime.datetime.strptime(raw_data['date'], "%Y-%m-%d").date())
         for e in raw_data['entrys']:
-            new_work_date.add_project(entry.from_dict(e))
+            new_work_date.add_entry(entry.from_dict(e))
 
-    def add_project(self, entry:entry) -> None:
-        self.data.append(entry)
+    def add_entry(self, entry:entry) -> None:
+        self.entrys.append(entry)
 
-    def get_dict(self) -> dict:
-        return {'date': self.date,
-                'entrys': self.data}
-
+    def to_dict(self) -> dict:
+        dict_entrys = []
+        for e in self.entrys:
+            dict_entrys.append(e.to_dict())
+        return {'date': self.date.strftime("%Y-%m-%d"),
+                'entrys': dict_entrys}
 
 class data:
     def __init__(self) -> None:
@@ -64,15 +72,22 @@ class data:
 
     def save_data(self, location):
         dict_data = []
+        projects_data = []
         for d in self.main_data:
-            dict_data.append(d.get_dict())
+            dict_data.append(d.to_dict())
         with open(location, 'w') as file:
-            json.dump(dict_data, file)
+            json.dump({'main_data':dict_data,
+                       }, file)
 
 
-my_data = [
-    {'date':[
-        {{'name': 'project'}:'discription'},
-        {{'name': 'project1'}:'discription'}
-    ]},
-]
+new_data = data()
+
+for i in range(5):
+    new_date = work_date(datetime.datetime.date(datetime.datetime.today()) + datetime.timedelta(days=i))
+    new_project = project(f'project{i+1}')
+    for j in range(10):
+        new_entry = entry(new_project, f'this is disc{(i+1)*j}')
+        new_date.add_entry(new_entry)
+    new_data.add_date(new_date)
+
+new_data.save_data('test.json')
