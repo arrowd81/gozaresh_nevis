@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from add_project_pop_up import add_project
 
 
 class Ui_MainWindow(object):
@@ -27,6 +28,7 @@ class Ui_MainWindow(object):
         self.addProjectButton = QtWidgets.QPushButton(self.centralwidget)
         self.addProjectButton.setGeometry(QtCore.QRect(500, 80, 181, 51))
         self.addProjectButton.setObjectName("addProjectButton")
+        self.addProjectButton.clicked.connect(self.show_add_project_dialog)
         self.newDateButton = QtWidgets.QPushButton(self.centralwidget)
         self.newDateButton.setGeometry(QtCore.QRect(500, 10, 181, 51))
         self.newDateButton.setObjectName("newDateButton")
@@ -61,6 +63,27 @@ class Ui_MainWindow(object):
         self.removeItemButton.setText(_translate("MainWindow", "remove item"))
         self.getOutputButton.setText(_translate("MainWindow", "get output"))
 
+    def show_add_project_dialog(self):
+        add_project_dialog = QtWidgets.QDialog()
+        add_project_ui = add_project()
+        add_project_ui.setupUi(add_project_dialog)
+        add_project_ui.buttonBox.accepted.connect(lambda: self.add_item(add_project_dialog,
+                                                                        add_project_ui.lineEdit.text(),
+                                                                        add_project_ui.textEdit.toPlainText(),
+                                                                        self.weekly_explorer.currentItem()))
+        add_project_dialog.exec_()
+
+    def add_item(self, dialog, project_name, discription, parent):
+        if parent:
+            item = QtWidgets.QTreeWidgetItem(parent)
+        else:
+            raise Exception('you must select the date to add this to')
+        # need to make sure the parent doesnt have a parent (is the first chiled of the root)
+        item.setText(0, project_name)
+        item.setText(0, project_name)
+        item1 = QtWidgets.QTreeWidgetItem(item)
+        item1.setText(0, discription)
+        dialog.accept()
 
 if __name__ == "__main__":
     import sys
