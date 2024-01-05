@@ -11,6 +11,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from add_project_pop_up import add_project
 from date_pop_up import add_date
+from delete_pop_up import delete
+from error_pop_up import Error
 
 
 class Ui_MainWindow(object):
@@ -40,6 +42,7 @@ class Ui_MainWindow(object):
         self.removeItemButton = QtWidgets.QPushButton(self.centralwidget)
         self.removeItemButton.setGeometry(QtCore.QRect(500, 150, 181, 51))
         self.removeItemButton.setObjectName("removeItemButton")
+        self.removeItemButton.clicked.connect(self.show_delete_dialog)
         self.getOutputButton = QtWidgets.QPushButton(self.centralwidget)
         self.getOutputButton.setGeometry(QtCore.QRect(500, 360, 181, 51))
         self.getOutputButton.setObjectName("getOutputButton")
@@ -65,6 +68,13 @@ class Ui_MainWindow(object):
         self.removeItemButton.setText(_translate("MainWindow", "remove item"))
         self.getOutputButton.setText(_translate("MainWindow", "get output"))
 
+    def show_error_dialog(self, error_message:str):
+        error_dialog = QtWidgets.QDialog()
+        error_ui = Error()
+        error_ui.setupUi(error_dialog)
+        error_ui.label.setText(error_message)
+        error_dialog.exec_()
+
     def show_add_project_dialog(self):
         add_project_dialog = QtWidgets.QDialog()
         add_project_ui = add_project()
@@ -84,6 +94,28 @@ class Ui_MainWindow(object):
                                                                      add_date_ui.lineEdit.text()))
         add_date_dialog.exec_()
 
+    def show_delete_dialog(self):
+        if self.weekly_explorer.currentItem() is None:
+            self.show_error_dialog('you must select something to delete!')
+        else:
+            show_delete_dialog = QtWidgets.QDialog()
+            delete_ui = delete()
+            delete_ui.setupUi(show_delete_dialog)
+            delete_ui.label.setText('Are you sure you want to DELETE\n' + self.weekly_explorer.currentItem().text(0))
+            delete_ui.buttonBox.accepted.connect(self.delete_tree)
+            show_delete_dialog.exec_()
+
+    def delete_tree(self):
+        selected_item = self.weekly_explorer.currentItem()
+        parent = selected_item.parent()
+        if parent is None:
+            # Top-level item
+            index = self.weekly_explorer.indexOfTopLevelItem(selected_item)
+            self.weekly_explorer.takeTopLevelItem(index)
+        else:
+            # Child item
+            parent.removeChild(selected_item)
+
     def add_date(self, dialog:QtWidgets.QDialog, gregorian_date:QtCore.QDate, Persian_date:str):
         item = QtWidgets.QTreeWidgetItem(self.weekly_explorer)
         item.setText(0, Persian_date + ' -> ' + gregorian_date.toString("yyyy-MM-dd"))
@@ -93,13 +125,12 @@ class Ui_MainWindow(object):
         if parent.parent() is None:
             item = QtWidgets.QTreeWidgetItem(parent)
         else:
-            raise Exception('you must select the date to add this to')
-        # need to make sure the parent doesnt have a parent (is the first chiled of the root)
-        item.setText(0, project_name)
+            self.show_error_dialog('you must select a date to add this to')
         item.setText(0, project_name)
         item1 = QtWidgets.QTreeWidgetItem(item)
         item1.setText(0, discription)
         dialog.accept()
+
 
 if __name__ == "__main__":
     import sys
