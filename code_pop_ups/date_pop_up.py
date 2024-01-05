@@ -13,7 +13,7 @@ import datetime
 import jdatetime
 
 
-class add_date(object):
+class UI_add_date(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(284, 178)
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Dialog = QtWidgets.QDialog()
-    ui = add_date()
+    ui = UI_add_date()
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())

@@ -11,7 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Error(object):
+class UI_error(object):
     def setupUi(self, Dialog:QtWidgets.QDialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(276, 119)
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Dialog = QtWidgets.QDialog()
-    ui = Error()
+    ui = UI_error()
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec_())

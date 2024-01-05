@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>702</width>
-    <height>462</height>
+    <height>466</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,12 +23,12 @@
       <x>0</x>
       <y>0</y>
       <width>471</width>
-      <height>411</height>
+      <height>421</height>
      </rect>
     </property>
     <column>
      <property name="text">
-      <string/>
+      <string>arash_data</string>
      </property>
     </column>
    </widget>
@@ -36,7 +36,7 @@
     <property name="geometry">
      <rect>
       <x>500</x>
-      <y>220</y>
+      <y>250</y>
       <width>181</width>
       <height>51</height>
      </rect>
@@ -49,7 +49,7 @@
     <property name="geometry">
      <rect>
       <x>500</x>
-      <y>80</y>
+      <y>130</y>
       <width>181</width>
       <height>51</height>
      </rect>
@@ -75,7 +75,7 @@
     <property name="geometry">
      <rect>
       <x>500</x>
-      <y>290</y>
+      <y>310</y>
       <width>181</width>
       <height>51</height>
      </rect>
@@ -88,7 +88,7 @@
     <property name="geometry">
      <rect>
       <x>500</x>
-      <y>150</y>
+      <y>190</y>
       <width>181</width>
       <height>51</height>
      </rect>
@@ -101,13 +101,26 @@
     <property name="geometry">
      <rect>
       <x>500</x>
-      <y>360</y>
+      <y>370</y>
       <width>181</width>
       <height>51</height>
      </rect>
     </property>
     <property name="text">
      <string>get output</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="newProjectButton">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>70</y>
+      <width>181</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>add new project</string>
     </property>
    </widget>
   </widget>
