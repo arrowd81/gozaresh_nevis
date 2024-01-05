@@ -10,10 +10,11 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from add_project_pop_up import add_project
+from date_pop_up import add_date
 
 
 class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
+    def setupUi(self, MainWindow:QtWidgets.QMainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(702, 462)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -32,6 +33,7 @@ class Ui_MainWindow(object):
         self.newDateButton = QtWidgets.QPushButton(self.centralwidget)
         self.newDateButton.setGeometry(QtCore.QRect(500, 10, 181, 51))
         self.newDateButton.setObjectName("newDateButton")
+        self.newDateButton.clicked.connect(self.show_add_date_dialog)
         self.saveButton = QtWidgets.QPushButton(self.centralwidget)
         self.saveButton.setGeometry(QtCore.QRect(500, 290, 181, 51))
         self.saveButton.setObjectName("saveButton")
@@ -53,7 +55,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self, MainWindow:QtWidgets.QMainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.loadButton.setText(_translate("MainWindow", "Load"))
@@ -73,8 +75,22 @@ class Ui_MainWindow(object):
                                                                         self.weekly_explorer.currentItem()))
         add_project_dialog.exec_()
 
-    def add_item(self, dialog, project_name, discription, parent):
-        if parent:
+    def show_add_date_dialog(self):
+        add_date_dialog = QtWidgets.QDialog()
+        add_date_ui = add_date()
+        add_date_ui.setupUi(add_date_dialog)
+        add_date_ui.buttonBox.accepted.connect(lambda: self.add_date(add_date_dialog,
+                                                                     add_date_ui.dateEdit.dateTime().date(),
+                                                                     add_date_ui.lineEdit.text()))
+        add_date_dialog.exec_()
+
+    def add_date(self, dialog:QtWidgets.QDialog, gregorian_date:QtCore.QDate, Persian_date:str):
+        item = QtWidgets.QTreeWidgetItem(self.weekly_explorer)
+        item.setText(0, Persian_date + ' -> ' + gregorian_date.toString("yyyy-MM-dd"))
+        dialog.accept()
+
+    def add_item(self, dialog:QtWidgets.QDialog, project_name, discription, parent:QtWidgets.QTreeWidgetItem):
+        if parent.parent() is None:
             item = QtWidgets.QTreeWidgetItem(parent)
         else:
             raise Exception('you must select the date to add this to')
