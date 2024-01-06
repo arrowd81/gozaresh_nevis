@@ -3,3 +3,5 @@ save button
 load button
 get output button
 edit discription button
+chat gpt writer
+send messages automaticly
