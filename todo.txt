@@ -1,7 +1,13 @@
-projects control ui (create new project, remove a project, update a project)
+projects control ui (
+    create new project,
+    remove a project,
+    update a project,
+    )
 save button
 load button
 get output button
 edit discription button
-chat gpt writer
 send messages automaticly
+mabe: chat gpt writer?
+mabe: dapp?
+mabe: js front?
