@@ -17,6 +17,7 @@ from code_pop_ups.new_project_pop_up import Ui_new_project
 
 
 class Ui_MainWindow(object):
+    #main UI
     def setupUi(self, MainWindow:QtWidgets.QMainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(702, 451)
@@ -77,6 +78,7 @@ class Ui_MainWindow(object):
         self.getOutputButton.setText(_translate("MainWindow", "get output"))
         self.newProjectButton.setText(_translate("MainWindow", "add new project"))
 
+    # dialogs
     def show_error_dialog(self, error_message:str):
         error_dialog = QtWidgets.QDialog()
         error_ui = UI_error()
@@ -126,6 +128,7 @@ class Ui_MainWindow(object):
             delete_ui.buttonBox.accepted.connect(self.delete_tree)
             show_delete_dialog.exec_()
 
+    # functions
     def create_new_project(self, project_name:str):
         self.projects_data.append(project_name)
 
